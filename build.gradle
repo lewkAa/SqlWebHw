@@ -24,9 +24,6 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
     testImplementation 'org.slf4j:slf4j-simple:2.0.3'
-    testImplementation 'io.rest-assured:rest-assured:5.3.2'
-    testImplementation 'io.rest-assured:json-path:5.3.2'
-    testImplementation 'io.rest-assured:xml-path:5.3.2'
 }
 
 test {

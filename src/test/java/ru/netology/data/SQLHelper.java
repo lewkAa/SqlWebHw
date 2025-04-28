@@ -47,6 +47,7 @@ public class SQLHelper {
         }
     }
 
+
     @SneakyThrows
     public static List<User> getUsers() {
         var usersSQL = "SELECT * FROM users;";
