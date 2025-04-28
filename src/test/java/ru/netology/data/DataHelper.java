@@ -23,6 +23,13 @@ public class DataHelper {
         return validUser;
     }
 
+    public static User getBadUser() {
+        User BadUser = new User();
+        BadUser.setLogin(genRndLogin());
+        BadUser.setPassword(genRndPass());
+        return BadUser;
+    }
+
     public static String getRandomCode(){
         String code = FAKER.number().digits(6);
         return code;

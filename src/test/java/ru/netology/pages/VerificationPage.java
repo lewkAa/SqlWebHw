@@ -1,7 +1,6 @@
 package ru.netology.pages;
 
 import com.codeborne.selenide.SelenideElement;
-import com.github.javafaker.Faker;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -13,24 +12,30 @@ public class VerificationPage {
     private SelenideElement verifyButton = $("[data-test-id='action-verify']");
     private SelenideElement errorMsg = $("[data-test-id='error-notification']");
 
-    public enum Type {VALID, INVALID}
 
     public VerificationPage() {
         codeField.shouldBe(visible);
         verifyButton.shouldBe(visible);
     }
 
-    public DbPage Verify(String code, Type type) {
+    private void verify(String code) {
         codeField.setValue(code);
         verifyButton.click();
+    }
 
-        if (type == Type.VALID) {
-            return new DbPage();
-        } else {
-            errorMsg.shouldBe(visible)
-                    .shouldHave(text("Ошибка! Неверно указан код! Попробуйте ещё раз."));
-        }
-        return null;
+    public DbPage validVerify(String code) {
+        verify(code);
+        return new DbPage();
+    }
+
+    public void invalidVerify(String code) {
+        verify(code);
+        errorCheck();
+    }
+
+    private void errorCheck() {
+        errorMsg.shouldBe(visible).shouldHave(text("Ошибка! Неверно указан код! Попробуйте ещё раз."));
     }
 }
+
 

@@ -1,33 +1,44 @@
 package ru.netology.pages;
 
 import com.codeborne.selenide.SelenideElement;
-import com.github.javafaker.Faker;
-import ru.netology.data.DataHelper;
+import lombok.extern.slf4j.Slf4j;
 import ru.netology.mode.User;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
+@Slf4j
 public class LoginPage {
-    Faker faker = new Faker();
+
     private SelenideElement loginField = $("[data-test-id='login'] input");
     private SelenideElement passwordField = $("[data-test-id='password'] input");
     private SelenideElement loginButton = $("[data-test-id='action-login']");
     private SelenideElement errorMsg = $("[data-test-id='error-notification']");
 
-    public enum Type { VALID, INVALID }
+    public LoginPage() {
+        loginField.shouldBe(visible);
+        passwordField.shouldBe(visible);
+    }
 
-    public VerificationPage Login(User user, Type type) {
+    private void  login(User user) {
         loginField.setValue(user.getLogin());
-        passwordField.setValue(type == Type.VALID ? user.getPassword() : DataHelper.genRndPass());
+        passwordField.setValue(user.getPassword());
         loginButton.click();
+    }
 
-        if (type == Type.VALID) {
-            return new VerificationPage();
-        } else {
-            errorMsg.shouldBe(visible)
-                    .shouldHave(text("Ошибка! Неверно указан логин или пароль"));
-            return null;
+    public VerificationPage validLogin(User user){
+        login(user);
+        return new VerificationPage();
+    }
+
+    public void invalidLogin(User user){
+        login(user);
+        errorCheck();
         }
+
+    private void errorCheck() {
+        errorMsg.shouldBe(visible)
+                .shouldHave(text("Ошибка! Неверно указан логин или пароль"));
     }
 }

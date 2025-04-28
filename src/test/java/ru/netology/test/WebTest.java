@@ -8,21 +8,19 @@ import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
 import ru.netology.data.SQLHelper;
 import ru.netology.pages.LoginPage;
-import ru.netology.pages.VerificationPage;
-
 import static com.codeborne.selenide.Selenide.open;
 
 @Slf4j
-public class WebTest {
-
-    @BeforeEach
-    void setup() {
-        open("http://localhost:9999");
-    }
+ class WebTest {
 
     @AfterAll
     static void cleanDatabase() {
         SQLHelper.cleanDatabase();
+    }
+
+    @BeforeEach
+    void setup() {
+        open("http://localhost:9999");
     }
 
     @Test
@@ -34,10 +32,10 @@ public class WebTest {
         log.info("Получаем пароль пользователя из БД: " + user.getPassword());
         log.info("Получаем статус пользователя из БД: " + user.getStatus());
         var logPage = new LoginPage();
-        var veriPage = logPage.Login(user, LoginPage.Type.VALID);
+        var veriPage = logPage.validLogin(user);
         var veriCode = SQLHelper.getCodeByUid(user.getId());
         log.info("Получаем код верификации из БД: " + veriCode);
-        veriPage.Verify(veriCode, VerificationPage.Type.VALID);
+        veriPage.validVerify(veriCode);
     }
 
     @Test
@@ -45,17 +43,17 @@ public class WebTest {
     void shouldLoginButNotVerify() {
         var user = DataHelper.getTestUser();
         var logPage = new LoginPage();
-        var veriPage = logPage.Login(user, LoginPage.Type.VALID);
+        var veriPage = logPage.validLogin(user);
         var veriCode = DataHelper.getRandomCode();
-        veriPage.Verify(veriCode,VerificationPage.Type.INVALID);
+        veriPage.invalidVerify(veriCode);
     }
 
     @Test
     @DisplayName("Логин с невалидными данными")
     void shouldNotLogin() {
-        var user = DataHelper.getTestUser();
-        var loginPage = new LoginPage();
-        loginPage.Login(user, LoginPage.Type.INVALID);
+        var user = DataHelper.getBadUser();
+        var logPage = new LoginPage();
+        logPage.invalidLogin(user);
     }
 
 }
