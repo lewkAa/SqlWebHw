@@ -9,11 +9,11 @@ public class DataHelper {
     private DataHelper() {
     }
 
-    public static String generateRandomLogin() {
+    public static String genRndLogin() {
         return FAKER.name().username();
     }
 
-    public static String generateRandomPassword() {
+    public static String genRndPass() {
         return FAKER.internet().password();
     }
 

@@ -2,6 +2,7 @@ package ru.netology.pages;
 
 import com.codeborne.selenide.SelenideElement;
 import com.github.javafaker.Faker;
+import ru.netology.data.DataHelper;
 import ru.netology.mode.User;
 
 import static com.codeborne.selenide.Condition.*;
@@ -18,7 +19,7 @@ public class LoginPage {
 
     public VerificationPage Login(User user, Type type) {
         loginField.setValue(user.getLogin());
-        passwordField.setValue(type == Type.VALID ? user.getPassword() : faker.internet().password());
+        passwordField.setValue(type == Type.VALID ? user.getPassword() : DataHelper.genRndPass());
         loginButton.click();
 
         if (type == Type.VALID) {
